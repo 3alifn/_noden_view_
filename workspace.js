@@ -1,6 +1,7 @@
 
+var noviewportdata= [];
 const noview= {
-
+    
     port: function({input_id, append_id, file_type, max_kb_size}){
     if(input_id==undefined || append_id==undefined || file_type==undefined || max_kb_size==undefined){
       window.alert('Warning! Required object ({ input_id , append_id, file_type, max_kb_size })')
@@ -10,10 +11,8 @@ const noview= {
     else{
     
         $('#'+input_id).on('change', (event)=>{
-    
+          console.log(noviewportdata);
         for (let index = 0; index < event.target.files.length; index++) {
-            // console.log(event.target.files[index])  
-        
           const filetype= event.target.files[index].type;
           const filename= event.target.files[index].name;
           const filesize= event.target.files[index].size/1000;
@@ -26,8 +25,14 @@ const noview= {
           
     
       if( file_type=='image' && filetype=='image/jpeg' || filetype=='image/jpg' || filetype=='image/png' || filetype=='image/gif'){
-        $('#'+append_id).append(`<img class="rounded" src="${tmppath}" width="200px" height="150px" alt="">`)
-      
+        $('#'+append_id).append(`
+       <span class='_parent_rmElement_${event.target.files[index].lastModified}'>
+        <img class="rounded" src="${tmppath}" width="200px" height="150px" alt="">
+        <span data-id='_rmElement_${event.target.files[index].lastModified}' data-id2='${event.target.files[index].name}' title='close' class='btn btn-close noview-close'></span>
+        </span>`)
+         
+        noviewportdata.push(event.target.files[index].name)
+
        } 
     
     
@@ -36,7 +41,8 @@ const noview= {
       else if( file_type=='audio' && filetype=='audio/mpeg'){
     
     $('#'+append_id).append(`<audio  controls src="${tmppath}"></audio>`)
-    
+    noviewportdata.push(event.target.files[index].name)
+
     
     }
     
@@ -45,6 +51,8 @@ const noview= {
      else if( file_type=='video' && filetype=='video/mp4'){
         $('#'+append_id).append(`<video width="300px" height="auto" controls src="${tmppath}"></video>
     `)
+    noviewportdata.push(event.target.files[index].name)
+
       
        }
     
@@ -54,7 +62,8 @@ const noview= {
     
     $('#'+append_id).append(`<p>goto visit for preview => <a target="_blank" href='${tmppath}'>${filename} </a></p>`)
     
-    
+    noviewportdata.push(event.target.files[index].name)
+
     }
     
     
@@ -77,6 +86,8 @@ const noview= {
         }
           
       }
+      
+
     
       })
     
@@ -85,4 +96,14 @@ const noview= {
     
     }
     }
+
+    $(document).on('click', '.noview-close' , (e)=>{
+      const rmdata= e.currentTarget.attributes[0].value;
+      const rmdataPOP= e.currentTarget.attributes[1].value;
+        $('._parent'+rmdata).remove()
+       const ___rmdataPOP= noviewportdata.indexOf(rmdataPOP)
+      noviewportdata.splice(___rmdataPOP, 0)
+     console.log(noviewportdata);
+    
+    })
     

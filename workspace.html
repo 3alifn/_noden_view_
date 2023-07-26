@@ -38,6 +38,8 @@
 
 <script src="./workspace.js"></script>
 
+
+
 <script>
 
   noview.port({
@@ -46,6 +48,18 @@
    file_type: 'image',
    max_kb_size: 1024
   })
+
+  $(document).on('click', '.noview-close' , (e)=>{
+  const rmdata= e.currentTarget.attributes[0].value;
+  const rmdataPOP= e.currentTarget.attributes[1].value;
+    $('.parent_'+rmdata).remove()
+   const ___rmdataPOP= noviewportdata.indexOf(rmdataPOP)
+   console.log(___rmdataPOP);
+   noviewportdata.splice(___rmdataPOP, 1)
+ console.log(noviewportdata);
+
+})
+
 
 </script>
 
